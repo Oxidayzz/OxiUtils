@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="OxiUtils">
+    <output-path>$USER_HOME$/Documents/Plugin</output-path>
+    <root id="archive" name="OxiUtils.jar">
+      <element id="module-output" name="OxiUtils" />
+    </root>
+  </artifact>
+</component>

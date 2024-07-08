@@ -1,0 +1,6 @@
+name: OxiUtils
+version: '1.0-SNAPSHOT'
+main: fr.oxidayzz.Main
+author: Oxidayzz
+
+commands:
