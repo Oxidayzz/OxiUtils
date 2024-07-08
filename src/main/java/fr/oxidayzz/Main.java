@@ -28,7 +28,7 @@ public class Main extends JavaPlugin {
         getLogger().info("##    ##    ####    ##  ##   ##    ###    ##  ##       #######");
         getLogger().info("##    ##   ##  ##   ##  ##   ##    ###    ##  ##            ##");
         getLogger().info("########  ##    ##  ##  #######    ###    ##  #######  #######");
-
+        checkVersion();
         getLogger().info("Le plugin démarre en version : " + this.version);
 
     }
