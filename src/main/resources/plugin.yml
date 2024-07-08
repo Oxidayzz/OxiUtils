@@ -1,0 +1,6 @@
+name: OxiUtils
+version: '${project.version}'
+main: fr.oxidayzz.Main
+author: Oxidayzz
+
+commands:
