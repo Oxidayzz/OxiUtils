@@ -23,11 +23,13 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        getLogger().info("--------------------------------------------------------------");
         getLogger().info("########  ##    ##  ##  ##   ##  #######  ##  ##       #######");
         getLogger().info("##    ##   ##  ##   ##  ##   ##    ###    ##  ##       ##      ");
         getLogger().info("##    ##    ####    ##  ##   ##    ###    ##  ##       #######");
         getLogger().info("##    ##   ##  ##   ##  ##   ##    ###    ##  ##            ##");
         getLogger().info("########  ##    ##  ##  #######    ###    ##  #######  #######");
+        getLogger().info("--------------------------------------------------------------");
         checkVersion();
         getLogger().info("Le plugin démarre en version : " + this.version);
 
@@ -58,10 +60,10 @@ public class Main extends JavaPlugin {
                     this.logger.info("+---------------------------------------+");
                 }
             } else {
-                this.logger.warning("Impossible de rla version la plus ");
+                this.logger.warning("Impossible de récupérer la version la plus récente. ");
             }
         } catch (Exception e) {
-            this.logger.warning("Erreur lors de la vde la version: " + e.getMessage());
+            this.logger.warning("Erreur lors de la vérification de la version: " + e.getMessage());
         }
     }
 
