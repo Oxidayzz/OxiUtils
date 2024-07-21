@@ -10,52 +10,52 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
 
-public class itemBuilder {
+public class ItemBuilder {
     private final ItemStack is;
 
-    public itemBuilder(Material m) {
+    public ItemBuilder(Material m) {
         this(m, 1);
     }
 
-    public itemBuilder(ItemStack is) {
+    public ItemBuilder(ItemStack is) {
         this.is = is;
     }
 
-    public itemBuilder(Material m, int amount) {
+    public ItemBuilder(Material m, int amount) {
         is = new ItemStack(m, amount);
     }
 
-    public itemBuilder(Material m, int amount, short meta){
+    public ItemBuilder(Material m, int amount, short meta){
         is = new ItemStack(m, amount, meta);
     }
 
-    public itemBuilder clone() {
-        return new itemBuilder(is);
+    public ItemBuilder clone() {
+        return new ItemBuilder(is);
     }
 
-    public itemBuilder setDurability(short dur) {
+    public ItemBuilder setDurability(short dur) {
         is.setDurability(dur);
         return this;
     }
 
-    public itemBuilder setName(String name) {
+    public ItemBuilder setName(String name) {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
         is.setItemMeta(im);
         return this;
     }
 
-    public itemBuilder addUnsafeEnchantment(Enchantment ench, int level) {
+    public ItemBuilder addUnsafeEnchantment(Enchantment ench, int level) {
         is.addUnsafeEnchantment(ench, level);
         return this;
     }
 
-    public itemBuilder removeEnchantment(Enchantment ench) {
+    public ItemBuilder removeEnchantment(Enchantment ench) {
         is.removeEnchantment(ench);
         return this;
     }
 
-    public itemBuilder setSkullOwner(String owner) {
+    public ItemBuilder setSkullOwner(String owner) {
         try {
             SkullMeta im = (SkullMeta) is.getItemMeta();
             im.setOwner(owner);
@@ -65,26 +65,26 @@ public class itemBuilder {
         return this;
     }
 
-    public itemBuilder addEnchant(Enchantment ench, int level) {
+    public ItemBuilder addEnchant(Enchantment ench, int level) {
         ItemMeta im = is.getItemMeta();
         im.addEnchant(ench, level, true);
         is.setItemMeta(im);
         return this;
     }
 
-    public itemBuilder setInfinityDurability() {
+    public ItemBuilder setInfinityDurability() {
         is.setDurability(Short.MAX_VALUE);
         return this;
     }
 
-    public itemBuilder setLore(String... lore) {
+    public ItemBuilder setLore(String... lore) {
         ItemMeta im = is.getItemMeta();
         im.setLore(Arrays.asList(lore));
         is.setItemMeta(im);
         return this;
     }
 
-    public itemBuilder setLeatherArmorColor(Color color) {
+    public ItemBuilder setLeatherArmorColor(Color color) {
         try {
             LeatherArmorMeta im = (LeatherArmorMeta) is.getItemMeta();
             im.setColor(color);
