@@ -1,12 +1,20 @@
 package fr.oxidayzz;
 
+import fr.mrmicky.fastboard.FastBoard;
 import fr.oxidayzz.commands.GestionCohost;
 import fr.oxidayzz.commands.GestionHost;
+import fr.oxidayzz.commands.ListHost;
+import fr.oxidayzz.commands.ListWorld;
+import fr.oxidayzz.listeners.onClick;
+import fr.oxidayzz.listeners.protectedInventory;
+import fr.oxidayzz.listeners.updateBoard;
 import fr.oxidayzz.utils.ItemBuilder;
 import fr.oxidayzz.utils.TabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,9 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -26,13 +32,22 @@ public class Main extends JavaPlugin {
 
     public static ArrayList<String> hosts;
     public static ArrayList<String> cohosts;
+    public static ArrayList<Inventory> protectedInventory = new ArrayList<>();
     public static Map<String, Boolean> confirmationMap = new HashMap<>();
     public static String EPrefix = "§e§lUHC§6§lCore §l§8>> §c";
     public static String Prefix = "§e§lUHC§6§lCore §l§8>> §7";
+    public static final Map<UUID, FastBoard> boards = new HashMap<>();
     private static Main instance;
 
     private final Logger logger = getLogger();
     public final String version = getDescription().getVersion();
+
+    public static List<String> getHosts() {
+        return hosts;
+    }
+    public static List<String> getCohosts() {
+        return cohosts;
+    }
 
     @Override
     public void onEnable() {
@@ -50,10 +65,15 @@ public class Main extends JavaPlugin {
 
         this.getCommand("host").setExecutor(new GestionHost());
         this.getCommand("cohost").setExecutor(new GestionCohost());
+        this.getCommand("listworld").setExecutor(new ListWorld());
+        this.getCommand("listhost").setExecutor(new ListHost());
 
         this.getCommand("host").setTabCompleter(new TabCompleter());
         this.getCommand("cohost").setTabCompleter(new TabCompleter());
 
+        getServer().getPluginManager().registerEvents(new onClick(), this);
+        getServer().getPluginManager().registerEvents(new updateBoard(), this);
+        getServer().getPluginManager().registerEvents(new protectedInventory(), this);
         new BukkitRunnable() {
 
             @Override
@@ -61,10 +81,12 @@ public class Main extends JavaPlugin {
                 for(Player player : Bukkit.getOnlinePlayers()) {
                     updatePlayerPrefix(player);
                     hostGiveItem(player);
+                    for (FastBoard board : boards.values()) {
+                        updateBoard(board);
+                    }
                 }
             }
         }.runTaskTimerAsynchronously(this, 0, 20);
-
     }
 
     @Override
@@ -101,7 +123,7 @@ public class Main extends JavaPlugin {
         String playerName = player.getName();
         if(Main.hosts.contains(playerName) || Main.cohosts.contains(playerName)) {
             ItemBuilder menu = new ItemBuilder(Material.COMPASS).setName("§d§lMenu §l§8>> §fClic-droit");
-            player.getInventory().setItem(4, menu.toItemStack());
+            player.getInventory().setItem(8, menu.toItemStack());
         }else {
             removeCustomItem(player, "§d§lMenu §l§8>> §fClic-droit");
         }
@@ -119,23 +141,33 @@ public class Main extends JavaPlugin {
     }
     private void updatePlayerPrefix(Player player) {
         String playerName = player.getName();
-        if (Main.hosts.contains(playerName)) {
+        if(hosts.contains(playerName)) {
             String prefix = "§b✦ §r";
             player.setPlayerListName(prefix + playerName);
             player.setDisplayName(prefix + playerName);
-        } else {
-            String prefix = "";
-            player.setPlayerListName(prefix + playerName);
-            player.setDisplayName(prefix + playerName);
-        }
-        if (Main.cohosts.contains(playerName)) {
+        }else if (cohosts.contains(playerName)) {
             String prefix = "§3✦ §r";
-            player.setPlayerListName(prefix + playerName);
-            player.setDisplayName(prefix + playerName);
-        } else {
+            player.setPlayerListName(prefix + player.getName());
+            player.setDisplayName(prefix + player.getName());
+        }else if (!hosts.contains(playerName) && !cohosts.contains(playerName)) {
             String prefix = "";
-            player.setPlayerListName(prefix + playerName);
-            player.setDisplayName(prefix + playerName);
+            player.setDisplayName(player.getName());
+            player.setDisplayName(player.getName());
         }
+    }
+    private  void updateBoard(FastBoard board){
+        board.updateLines(
+                "",
+                "Players: " + getServer().getOnlinePlayers().size(),
+                "",
+                "Kills: " + board.getPlayer().getStatistic(Statistic.PLAYER_KILLS),
+                ""
+        );
+    }
+    public static void addProtectInventory(Inventory inventory) {
+        protectedInventory.add(inventory);
+    }
+    public static ArrayList<Inventory> getProtectedInventory() {
+        return protectedInventory;
     }
 }

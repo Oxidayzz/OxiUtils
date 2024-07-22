@@ -10,50 +10,26 @@ import org.bukkit.entity.Player;
 import java.io.File;
 
 public class WorldUtils {
-    public void handleCreateWorld(Player player, String worldName) {
-        World world = Bukkit.getWorld(worldName);
-        if (world != null) {
-            player.sendMessage("Le monde existe déjà. Utilisez /world delete " + worldName + " pour le supprimer d'abord.");
-        } else if (Main.confirmationMap.containsKey(worldName) && Main.confirmationMap.get(worldName)) {
-            createWorld(worldName);
-            Main.confirmationMap.remove(worldName);
-            player.sendMessage("Le monde " + worldName + " a été créé.");
-        } else {
-            Main.confirmationMap.put(worldName, true);
-            player.sendMessage("Voulez-vous vraiment créer un nouveau monde nommé " + worldName + "? Utilisez la commande à nouveau pour confirmer.");
-        }
-    }
-
-    public void handleDeleteWorld(Player player, String worldName) {
-        World world = Bukkit.getWorld(worldName);
-        if (world == null) {
-            player.sendMessage("Le monde n'existe pas.");
-        } else if (Main.confirmationMap.containsKey(worldName) && Main.confirmationMap.get(worldName)) {
-            deleteWorld(worldName);
-            Main.confirmationMap.remove(worldName);
-            player.sendMessage("Le monde " + worldName + " a été supprimé.");
-        } else {
-            Main.confirmationMap.put(worldName, true);
-            player.sendMessage("Voulez-vous vraiment supprimer le monde nommé " + worldName + "? Utilisez la commande à nouveau pour confirmer.");
-        }
-    }
-
-    private void createWorld(String worldName) {
+    public static void createWorld(Player player, String worldName) {
+        player.sendMessage(Main.Prefix + "Création du monde en cours ...");
         WorldCreator creator = new WorldCreator(worldName);
         creator.environment(World.Environment.NORMAL);
         creator.type(WorldType.NORMAL);
         Bukkit.createWorld(creator);
+        player.sendMessage(Main.Prefix + "Création du monde terminé !");
     }
 
-    private void deleteWorld(String worldName) {
+    public static void deleteWorld(Player player, String worldName) {
         World world = Bukkit.getWorld(worldName);
+        player.sendMessage(Main.Prefix + "Suppression du monde en cours ...");
         if (world != null) {
             Bukkit.unloadWorld(world, false);
             deleteWorldFiles(world.getWorldFolder());
+            player.sendMessage(Main.Prefix + "La suppresion du monde a été effectuer avec succés !");
         }
     }
 
-    private void deleteWorldFiles(File path) {
+    private static void deleteWorldFiles(File path) {
         if (path.exists()) {
             for (File file : path.listFiles()) {
                 if (file.isDirectory()) {

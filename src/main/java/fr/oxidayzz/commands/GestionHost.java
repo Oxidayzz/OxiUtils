@@ -1,7 +1,6 @@
 package fr.oxidayzz.commands;
 
 import fr.oxidayzz.Main;
-import fr.oxidayzz.oxiutils.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

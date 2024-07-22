@@ -4,3 +4,15 @@ main: fr.oxidayzz.Main
 author: Oxidayzz
 
 commands:
+  host:
+    description:
+    usage:
+  cohost:
+    description:
+    usage:
+  listworld:
+    description:
+    usage:
+  listhost:
+    description:
+    usage:
